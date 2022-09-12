@@ -19,7 +19,6 @@ class App extends React.Component {
   render() {
     return (
       <BrowserRouter>
-        {/* <p>TrybeTunes</p> */}
         <Route exact path="/" component={ Login } />
         <Route exact path="/search" component={ Search } />
         <Route exact path="/album/:id" component={ Album } />

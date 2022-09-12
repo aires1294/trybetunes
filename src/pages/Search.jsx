@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Header from '../components/Header';
+// import Loading from '../components/Loading';
 
 class Search extends Component {
   constructor() {
@@ -7,6 +8,7 @@ class Search extends Component {
     this.state = {
       name: '',
       isDisabled: true,
+      // loading: false,
     };
   }
 
@@ -29,13 +31,24 @@ class Search extends Component {
     }
   };
 
+  // handleButton = async () => {
+  //   const { name } = this.state;
+  //   this.setState({
+  //     loading: true,
+  //   });
+  //   await createUser({ name });
+  //   this.setState({
+  //     loading: false,
+  //   });
+  // };
+
   render() {
     const { name, isDisabled } = this.state;
     return (
       <div>
         <Header />
         <div data-testid="page-search">Search</div>
-        <input 
+        <input
           data-testid="search-artist-input"
           value={ name }
           onChange={ this.handleChange }
@@ -43,7 +56,7 @@ class Search extends Component {
         <button
           data-testid="search-artist-button"
           type="button"
-          // onClick={  }
+          // onClick={ this.handleButton }
           disabled={ isDisabled }
         >
           Pesquisar
