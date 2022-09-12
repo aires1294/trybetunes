@@ -50,7 +50,8 @@ class Search extends Component {
           musicList: pesquisa,
           saveName: artista,
         });
-      });
+      },
+    );
   };
 
   render() {
@@ -59,19 +60,25 @@ class Search extends Component {
       <div>
         <Header />
         <div data-testid="page-search">
-          <input
-            data-testid="search-artist-input"
-            value={ name }
-            onChange={ this.handleChange }
-          />
-          <button
-            data-testid="search-artist-button"
-            type="button"
-            onClick={ this.handleButtonQuery }
-            disabled={ isDisabled }
-          >
-            Pesquisar
-          </button>
+          {loading === true ? (
+            <Loading />
+          ) : (
+            <>
+              <input
+                data-testid="search-artist-input"
+                value={ name }
+                onChange={ this.handleChange }
+              />
+              <button
+                data-testid="search-artist-button"
+                type="button"
+                onClick={ this.handleButtonQuery }
+                disabled={ isDisabled }
+              >
+                Pesquisar
+              </button>
+            </>
+          )}
         </div>
 
         <div>
