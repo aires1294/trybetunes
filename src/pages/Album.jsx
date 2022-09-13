@@ -3,45 +3,71 @@ import PropTypes from 'prop-types';
 import Header from '../components/Header';
 import getMusics from '../services/musicsAPI';
 import MusicCard from '../components/MusicCard';
-// import Loading from './Loading';
+// import { addSong, getFavoriteSongs, removeSong } from '../services/favoriteSongsAPI';
+// import Loading from '../components/Loading';
 
 class Album extends Component {
   constructor() {
     super();
     this.state = {
-      letra: [],
-      albumList: {},
-      // loading: false,
+      albumList: [],
+      objetoMusic: {},
     };
   }
 
   componentDidMount() {
-    this.album();
+    this.objetoMusic();
   }
 
-  album = async () => {
+  // favoriteMusic = async (elemento) => {
+  //   const { favorite } = this.state;
+  //   const newMusic = favorite.find((e) => e.trackName === elemento.trackName);
+  //   this.setState({
+  //     loading: true,
+  //   }, async () => {
+  //     if (elemento.checked) {
+  //       await addSong(newMusic);
+  //     } else {
+  //       await removeSong(newMusic);
+  //     }
+  //     const results = await getFavoriteSongs();
+  //     console.log(results);
+  //     this.setState({
+  //       // results,
+  //       loading: false,
+  //     });
+  //   });
+  // };
+
+  objetoMusic = async () => {
     const { match: { params: { id } } } = this.props;
     const pesquisaMusic = await getMusics(id);
-    this.setState({ albumList: pesquisaMusic[0], letra: pesquisaMusic.slice(1) });
+    this.setState({ objetoMusic: pesquisaMusic[0], albumList: pesquisaMusic.slice(1) });
   };
 
   render() {
-    const { albumList, letra } = this.state;
+    const { objetoMusic, albumList } = this.state;
     return (
       <div>
         <Header />
-        <div data-testid="page-album"> </div>
-        <div data-testid="artist-name">{albumList.artistName}</div>
-        <div data-testid="album-name">{albumList.collectionName}</div>
-        {
-          letra.map((music) => (
+        <div data-testid="page-album">
+          <p data-testid="artist-name">
+            Artista
+            {objetoMusic.artistName}
+          </p>
+          <h2 data-testid="album-name">
+            {`${objetoMusic.collectionName} ${objetoMusic.artistName}`}
+          </h2>
+          {albumList.map((musica) => (
             <MusicCard
-              key={ music.trackId }
-              trackName={ music.trackName }
-              previewUrl={ music.previewUrl }
+              trackName={ musica.trackName }
+              key={ musica.trackName }
+              previewUrl={ musica.previewUrl }
+              music={ musica }
+              trackId={ musica.trackId }
             />
-          ))
-        }
+          ))}
+        </div>
       </div>
     );
   }
@@ -50,7 +76,7 @@ class Album extends Component {
 Album.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
-      id: PropTypes.string.isRequired,
+      id: PropTypes.string,
     }),
   }),
 }.isRequired;
