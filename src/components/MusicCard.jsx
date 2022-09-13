@@ -6,7 +6,8 @@ import { addSong, getFavoriteSongs } from '../services/favoriteSongsAPI';
 export default class MusicCard extends Component {
   state = {
     loading: false,
-    favorite: [],
+    // favorite: [],
+    teste: false,
   };
 
   componentDidMount() {
@@ -15,7 +16,10 @@ export default class MusicCard extends Component {
 
   takeFavorite = async () => {
     const response = await getFavoriteSongs();
-    this.setState({ favorite: response });
+    const { trackName } = this.props;
+    // this.setState({ favorite: response });
+    this.setState({ teste: response
+      .filter((elem) => elem.trackName === trackName).length !== 0 });
   };
 
   handleChange = async ({ target }) => {
@@ -23,6 +27,7 @@ export default class MusicCard extends Component {
     if (target.checked) {
       this.setState({ loading: true });
       await addSong(music);
+      await this.takeFavorite();
       this.setState({ loading: false });
     }
   };
@@ -33,34 +38,34 @@ export default class MusicCard extends Component {
       previewUrl,
       trackId } = this.props;
     const {
-      favorite,
-      loading } = this.state;
-    const preview = (
-      <div>
-        {trackName}
-        <audio
-          data-testid="audio-component"
-          src={ previewUrl }
-          controls
-        >
-          <track kind="captions" />
-          <code>audio</code>
-        </audio>
-        <label htmlFor="check">
-          Favorita
-          <input
-            name="favorites"
-            id="check"
-            type="checkbox"
-            onChange={ this.handleChange }
-            checked={ favorite.some((elem) => elem.trackName === trackName) }
-            data-testid={ `checkbox-music-${trackId}` }
-          />
-        </label>
-      </div>
-    );
+
+      loading, teste } = this.state;
     return (
-      (loading) ? <Loading /> : preview
+      <ul>
+        { loading && <Loading /> }
+        <li>
+          {trackName}
+          <audio
+            data-testid="audio-component"
+            src={ previewUrl }
+            controls
+          >
+            <track kind="captions" />
+            <code>audio</code>
+          </audio>
+          <label htmlFor="check">
+            Favorita
+            <input
+              name="favorites"
+              id="check"
+              type="checkbox"
+              onChange={ this.handleChange }
+              checked={ teste }
+              data-testid={ `checkbox-music-${trackId}` }
+            />
+          </label>
+        </li>
+      </ul>
     );
   }
 }
